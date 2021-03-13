@@ -15,15 +15,37 @@ function defineRandomBackgroundColorBalls() {
   }
 }
 
-function showBackgroundColorRandomBall() {
-  const randomIndex = getRandomInt(0, 6);
+const randomNumber = getRandomInt(0, 6);
+
+function getRgbBallGuessed() {
+  const randomIndex = randomNumber;
   const balls = document.querySelectorAll('.ball');
-  const divRgbColor = document.getElementById('rgb-color');
-  const rgb = balls[randomIndex].style.backgroundColor.slice(3);
-  divRgbColor.innerText = `${rgb}`;
+  return balls[randomIndex].style.backgroundColor;
 }
+
+function showRgbBallGuessed() {
+  const divRgbColor = document.getElementById('rgb-color');
+  const rgbBallGuessed = getRgbBallGuessed();
+  divRgbColor.innerText = `${rgbBallGuessed.slice(3)}`;
+}
+
+function showAnswer(event) {
+  const rgbBallGuessed = getRgbBallGuessed();
+  const targetBackgroundColor = event.target.style.backgroundColor;
+  if (targetBackgroundColor === rgbBallGuessed) {
+    document.getElementById('answer').innerText = 'Acertou!';
+  } else {
+    document.getElementById('answer').innerText = 'Errou! Tente novamente!';
+  }
+}
+
+function addEventClassBall() {
+  const balls = document.getElementById('balls-section');
+  balls.addEventListener('click', showAnswer);
+}
+addEventClassBall();
 
 window.onload = () => {
   defineRandomBackgroundColorBalls();
-  showBackgroundColorRandomBall();
+  showRgbBallGuessed();
 };

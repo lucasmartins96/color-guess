@@ -45,6 +45,18 @@ function addEventClassBall() {
 }
 addEventClassBall();
 
+function resetGameOrColors() {
+  defineRandomBackgroundColorBalls();
+  showRgbBallGuessed();
+  document.getElementById('answer').innerText = 'Escolha uma cor';
+}
+
+function addEventResetGameBtn() {
+  const resetGameBtn = document.getElementById('reset-game');
+  resetGameBtn.addEventListener('click', resetGameOrColors);
+}
+addEventResetGameBtn();
+
 window.onload = () => {
   defineRandomBackgroundColorBalls();
   showRgbBallGuessed();

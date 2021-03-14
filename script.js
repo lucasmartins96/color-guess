@@ -17,6 +17,30 @@ function defineRandomBackgroundColorBalls() {
 
 const randomNumber = getRandomInt(0, 6);
 
+function setScore() {
+  const score = 0;
+  sessionStorage.score = score;
+}
+
+function getScore() {
+  const scoreSaved = sessionStorage.score;
+  return scoreSaved;
+}
+
+function addScore(score) {
+  const scoreSaved = getScore();
+  const newScore = parseInt(scoreSaved, 10) + score;
+  sessionStorage.score = newScore;
+}
+
+function removeScore(score) {
+  const scoreSaved = getScore();
+  if (parseInt(scoreSaved, 10) > 0) {
+    const newScore = parseInt(scoreSaved, 10) - score;
+    sessionStorage.score = newScore;
+  }
+}
+
 function getRgbBallGuessed() {
   const randomIndex = randomNumber;
   const balls = document.querySelectorAll('.ball');
@@ -29,25 +53,44 @@ function showRgbBallGuessed() {
   divRgbColor.innerText = `${rgbBallGuessed.slice(3)}`;
 }
 
-function showAnswer(event) {
+function showAnswer() {
   const rgbBallGuessed = getRgbBallGuessed();
-  const targetBackgroundColor = event.target.style.backgroundColor;
+  const ballSelected = document.querySelector('.selected');
+  const targetBackgroundColor = ballSelected.style.backgroundColor;
   if (targetBackgroundColor === rgbBallGuessed) {
     document.getElementById('answer').innerText = 'Acertou!';
+    addScore(3);
+    document.getElementById('score').innerText = getScore();
   } else {
     document.getElementById('answer').innerText = 'Errou! Tente novamente!';
+    removeScore(1);
+    document.getElementById('score').innerText = getScore();
   }
+}
+
+function isSelected() {
+  const selected = document.querySelector('.selected');
+  if (selected === null) return false;
+  return true;
 }
 
 function addEventClassBall() {
   const balls = document.getElementById('balls-section');
-  balls.addEventListener('click', showAnswer);
+  balls.addEventListener('click', (event) => {
+    if (!isSelected()) {
+      event.target.classList.add('selected');
+      showAnswer();
+    }
+  });
 }
 addEventClassBall();
 
 function resetGameOrColors() {
   defineRandomBackgroundColorBalls();
   showRgbBallGuessed();
+  if (isSelected()) {
+    document.querySelector('.selected').classList.remove('selected');
+  }
   document.getElementById('answer').innerText = 'Escolha uma cor';
 }
 
@@ -60,4 +103,6 @@ addEventResetGameBtn();
 window.onload = () => {
   defineRandomBackgroundColorBalls();
   showRgbBallGuessed();
+  setScore();
+  document.getElementById('score').innerText = getScore();
 };

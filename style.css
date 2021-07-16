@@ -5,3 +5,5 @@
   height: 100px;
   display: inline-block;
 }
+
+.selected { border: 5px solid black;}
